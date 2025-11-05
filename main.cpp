@@ -70,6 +70,20 @@ public:
         }
         cout << "Sum of secondary diagonal: " << output << endl;
     }
+    void swapRows(int row1, int row2) {
+        if (row1 >= 0 && row1 < size && row2 >= 0 && row2 < size) {
+            cout << "Row-swapped matrix:" << endl;
+            int buffer;
+            for (int i = 0; i < size; i ++) {
+                buffer = *(data+size*row1+i);
+                *(data+size*row1+i) = *(data+size*row2+i);
+                *(data+size*row2+i) = buffer;
+            }
+            display();
+        } else {
+            cout << "Invalid row numbers.";
+        }
+    }
 };
 
 int main() {
@@ -133,6 +147,13 @@ int main() {
         } else if (choice == 4) {
             //Print the sums of the diagonals
             matrix1.trace();
+        } else if (choice == 5) {
+            //Ask for rows to swap
+            cout << "First row to swap: ";
+            cin >> row1;
+            cout << "Second row to swap: ";
+            cin >> row2;
+            matrix1.swapRows(row1, row2);
         } else {
             cout << "Invalid choice." << endl;
         }
