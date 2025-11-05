@@ -65,75 +65,90 @@ public:
         }
         return output;
     }
-    
-    void trace() {
-        int output = 0;
-        //Add main diagonal entries
-        for (int i = 0; i < size; i ++) {
-            output += *(data+i*(size+1));
-        }
-        cout << "Sum of main diagonal: " << output << endl;
-        output = 0;
-        //Add secondary diagonal entries
-        for (int i = 0; i < size; i ++) {
-             output += *(data+(i+1)*(size-1));
-        }
-        cout << "Sum of secondary diagonal: " << output << endl;
-    }
-    
-    void swapRows(int row1, int row2) {
-        //Validate index input
-        if (row1 >= 0 && row1 < size && row2 >= 0 && row2 < size) {
-            cout << "Row-swapped matrix:" << endl;
-            //Create a buffer for the first row
-            int buffer;
-            for (int i = 0; i < size; i ++) {
-                buffer = *(data+size*row1+i);
-                //Set the first row to the second row
-                *(data+size*row1+i) = *(data+size*row2+i);
-                //Restore the first row from the buffer to the second row
-                *(data+size*row2+i) = buffer;
-            }
-            display();
-        } else {
-            //Display an error
-            cout << "Invalid row numbers." << endl;
-        }
-    }
-    
-    void swapClms(int clm1, int clm2) {
-        //Validate index input
-        if (clm1 >= 0 && clm1 < size && clm2 >= 0 && clm2 < size) {
-            cout << "Column-swapped matrix:" << endl;
-            //Create a buffer for the first row
-            int buffer;
-            for (int i = 0; i < size; i ++) {
-                buffer = *(data+size*i+clm1);
-                //Set the first column to the second column
-                *(data+size*i+clm1) = *(data+size*i+clm2);
-                //Restore the first column from the buffer to the second column
-                *(data+size*i+clm2) = buffer;
-            }
-            display();
-        } else {
-            //Display an error
-            cout << "Invalid column numbers." << endl;
-        }
-    }
-    
-    void write(int row = 0, int clm = 0, int entry = 100) {
-        //Validate index input
-        if (row >= 0 && row < size && clm >= 0 && clm < size) {
-            cout << "Updated matrix:" << endl;
-            //Set specified entry to the new value
-            *(data+size*row+clm) = entry;
-            display();
-        } else {
-            //Display an error
-            cout << "Invalid index numbers." << endl;
-        }
-    }
 };
+
+void trace(Matrix matrix) {
+    int output = 0;
+    //Add main diagonal entries
+    for (int i = 0; i < matrix.size; i ++) {
+        output += *(matrix.data+i*(matrix.size+1));
+    }
+    cout << "Sum of main diagonal: " << output << endl;
+    output = 0;
+    //Add secondary diagonal entries
+    for (int i = 0; i < matrix.size; i ++) {
+         output += *(matrix.data+(i+1)*(matrix.size-1));
+    }
+    cout << "Sum of secondary diagonal: " << output << endl;
+}
+
+void swapRows(Matrix matrix, int row1, int row2) {
+    //Validate index input
+    if (row1 >= 0 && row1 < matrix.size && row2 >= 0 && row2 < matrix.size) {
+        Matrix output(tempMatrix, matrix.size);
+        cout << "Row-swapped matrix:" << endl;
+        //Copy the matrix to the output
+        for (int i = 0; i < matrix.size*matrix.size; i ++) {
+            *(output.data+i) = *(matrix.data+i);
+        }
+        //Create a buffer for the first row
+        int buffer;
+        for (int i = 0; i < matrix.size; i ++) {
+            buffer = *(output.data+matrix.size*row1+i);
+            //Set the first row to the second row
+            *(output.data+matrix.size*row1+i) = *(output.data+matrix.size*row2+i);
+            //Restore the first row from the buffer to the second row
+            *(output.data+matrix.size*row2+i) = buffer;
+        }
+        output.display();
+    } else {
+        //Display an error
+        cout << "Invalid row numbers." << endl;
+    }
+}
+
+void swapClms(Matrix matrix, int clm1, int clm2) {
+    //Validate index input
+    if (clm1 >= 0 && clm1 < matrix.size && clm2 >= 0 && clm2 < matrix.size) {
+        Matrix output(tempMatrix, matrix.size);
+        cout << "Column-swapped matrix:" << endl;
+        //Copy the matrix to the output
+        for (int i = 0; i < matrix.size*matrix.size; i ++) {
+            *(output.data+i) = *(matrix.data+i);
+        }
+        //Create a buffer for the first column
+        int buffer;
+        for (int i = 0; i < matrix.size; i ++) {
+            buffer = *(output.data+matrix.size*i+clm1);
+            //Set the first column to the second column
+            *(output.data+matrix.size*i+clm1) = *(output.data+matrix.size*i+clm2);
+            //Restore the first column from the buffer to the second column
+            *(output.data+matrix.size*i+clm2) = buffer;
+        }
+        output.display();
+    } else {
+        //Display an error
+        cout << "Invalid column numbers." << endl;
+    }
+}
+
+void writeMatrix(Matrix matrix, int row = 0, int clm = 0, int entry = 100) {
+    //Validate index input
+    if (row >= 0 && row < matrix.size && clm >= 0 && clm < matrix.size) {
+        Matrix output(tempMatrix, matrix.size);
+        cout << "Updated matrix:" << endl;
+        //Copy the matrix to the output
+        for (int i = 0; i < matrix.size*matrix.size; i ++) {
+            *(output.data+i) = *(matrix.data+i);
+        }
+        //Set specified entry to the new value
+        *(output.data+matrix.size*row+clm) = entry;
+        output.display();
+    } else {
+        //Display an error
+        cout << "Invalid index numbers." << endl;
+    }
+}
 
 int main() {
     //Open a file
@@ -195,21 +210,21 @@ int main() {
             matrixProduct.display();
         } else if (choice == 4) {
             //Print the sums of the diagonals
-            matrix1.trace();
+           trace(matrix1);
         } else if (choice == 5) {
             //Ask for rows to swap
             cout << "First row to swap: ";
             cin >> row1;
             cout << "Second row to swap: ";
             cin >> row2;
-            matrix1.swapRows(row1, row2);
+            swapRows(matrix1, row1, row2);
         } else if (choice == 6) {
             //Ask for columns to swap
             cout << "First column to swap: ";
             cin >> row1;
             cout << "Second column to swap: ";
             cin >> row2;
-            matrix1.swapClms(row1, row2);
+            swapClms(matrix1, row1, row2);
         } else if (choice == 7) {
             //Ask for index to change
             cout << "Row index to change: ";
@@ -218,7 +233,7 @@ int main() {
             cin >> row2;
             cout << "New entry to insert: ";
             cin >> newEntry;
-            matrix1.write(row1, row2, newEntry);
+            writeMatrix(matrix1, row1, row2, newEntry);
         } else {
             cout << "Invalid choice." << endl;
         }
