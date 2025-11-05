@@ -70,6 +70,7 @@ public:
         }
         cout << "Sum of secondary diagonal: " << output << endl;
     }
+    
     void swapRows(int row1, int row2) {
         if (row1 >= 0 && row1 < size && row2 >= 0 && row2 < size) {
             cout << "Row-swapped matrix:" << endl;
@@ -81,7 +82,22 @@ public:
             }
             display();
         } else {
-            cout << "Invalid row numbers.";
+            cout << "Invalid row numbers." << endl;
+        }
+    }
+    
+    void swapClms(int clm1, int clm2) {
+        if (clm1 >= 0 && clm1 < size && clm2 >= 0 && clm2 < size) {
+            cout << "Column-swapped matrix:" << endl;
+            int buffer;
+            for (int i = 0; i < size; i ++) {
+                buffer = *(data+size*i+clm1);
+                *(data+size*i+clm1) = *(data+size*i+clm2);
+                *(data+size*i+clm2) = buffer;
+            }
+            display();
+        } else {
+            cout << "Invalid column numbers." << endl;
         }
     }
 };
@@ -154,6 +170,13 @@ int main() {
             cout << "Second row to swap: ";
             cin >> row2;
             matrix1.swapRows(row1, row2);
+        } else if (choice == 6) {
+            //Ask for columns to swap
+            cout << "First column to swap: ";
+            cin >> row1;
+            cout << "Second column to swap: ";
+            cin >> row2;
+            matrix1.swapClms(row1, row2);
         } else {
             cout << "Invalid choice." << endl;
         }
