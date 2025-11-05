@@ -20,7 +20,6 @@ public:
     }
     
     void display() {
-        string spaces;
         int curDigits;
         int maxDigits = 1;
         for (int i = 0; i < size * size; i ++) {
@@ -29,20 +28,32 @@ public:
             }
         }
         for (int i = 0; i < size * size; i ++) {
-            spaces = "";
             curDigits = *(data+i);
             while (maxDigits>curDigits) {
                 curDigits *= 10;
-                spaces = spaces + " ";
+                cout << " ";
             }
-            cout << spaces << *(data+i) << (((i+1)%size==0)?"\n":" ");
+            cout << *(data+i) << (((i+1)%size==0)?"\n":" ");
         }
     }
     
     Matrix operator+(const Matrix &other) {
+        cout << "Sum of the input matrices:" << endl;
         Matrix output(tempMatrix, size);
         for (int i = 0; i < size*size; i ++) {
             *(output.data+i) = *(data + i) + *(other.data + i);
+        }
+        return output;
+    }
+    
+    Matrix operator*(const Matrix &other) {
+        cout << "Product of input matrices:" << endl;
+        Matrix output(tempMatrix, size);
+        for (int i = 0; i < size*size; i ++) {
+            *(output.data+i) = 0;
+            for (int j = 0; j < size; j ++) {
+                *(output.data+i) += (*(data+(i/size)*size+j)) * (*(other.data+i%size+j*size));
+            }
         }
         return output;
     }
@@ -97,15 +108,19 @@ int main() {
         cout << endl;
         if (choice == 1) {
             //Exit
-            cout << "Goodbye!";
+            cout << "Goodbye!" << endl;
         } else if (choice == 2) {
             //Add the input matrices
-            Matrix matrixSum = matrix1  + matrix2;
+            Matrix matrixSum = matrix1 + matrix2;
             matrixSum.display();
+        } else if (choice == 3) {
+            //Multiply the input matrices
+            Matrix matrixProduct = matrix1 * matrix2;
+            matrixProduct.display();
         } else {
-            cout << "Invalid choice.";
+            cout << "Invalid choice." << endl;
         }
-        cout << endl << endl;
+        cout << endl;
     }
     return 0;
 }
