@@ -57,6 +57,19 @@ public:
         }
         return output;
     }
+    
+    void trace() {
+        int output = 0;
+        for (int i = 0; i < size; i ++) {
+            output += *(data+i*(size+1));
+        }
+        cout << "Sum of main diagonal: " << output << endl;
+        output = 0;
+        for (int i = 0; i < size; i ++) {
+             output += *(data+(i+1)*(size-1));
+        }
+        cout << "Sum of secondary diagonal: " << output << endl;
+    }
 };
 
 int main() {
@@ -117,6 +130,9 @@ int main() {
             //Multiply the input matrices
             Matrix matrixProduct = matrix1 * matrix2;
             matrixProduct.display();
+        } else if (choice == 4) {
+            //Print the sums of the diagonals
+            matrix1.trace();
         } else {
             cout << "Invalid choice." << endl;
         }
