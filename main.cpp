@@ -100,6 +100,16 @@ public:
             cout << "Invalid column numbers." << endl;
         }
     }
+    
+    void write(int row = 0, int clm = 0, int entry = 100) {
+        if (row >= 0 && row < size && clm >= 0 && clm < size) {
+            cout << "Updated matrix:" << endl;
+            *(data+size*row+clm) = entry;
+            display();
+        } else {
+            cout << "Invalid index numbers." << endl;
+        }
+    }
 };
 
 int main() {
@@ -177,6 +187,15 @@ int main() {
             cout << "Second column to swap: ";
             cin >> row2;
             matrix1.swapClms(row1, row2);
+        } else if (choice == 7) {
+            //Ask for index to change
+            cout << "Row index to change: ";
+            cin >> row1;
+            cout << "Column index to change: ";
+            cin >> row2;
+            cout << "New entry to insert: ";
+            cin >> newEntry;
+            matrix1.write(row1, row2, newEntry);
         } else {
             cout << "Invalid choice." << endl;
         }
