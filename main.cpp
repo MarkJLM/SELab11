@@ -7,6 +7,8 @@
 #include <fstream>
 using namespace std;
 
+int* tempMatrix;
+
 class Matrix {
 public:
     int* data;
@@ -22,7 +24,7 @@ public:
         int curDigits;
         int maxDigits = 1;
         for (int i = 0; i < size * size; i ++) {
-            while (maxDigits < data[i]) {
+            while (maxDigits < *(data+i)) {
                 maxDigits *= 10;
             }
         }
@@ -35,6 +37,14 @@ public:
             }
             cout << spaces << *(data+i) << (((i+1)%size==0)?"\n":" ");
         }
+    }
+    
+    Matrix operator+(const Matrix &other) {
+        Matrix output(tempMatrix, size);
+        for (int i = 0; i < size*size; i ++) {
+            *(output.data+i) = *(data + i) + *(other.data + i);
+        }
+        return output;
     }
 };
 
@@ -54,6 +64,8 @@ int main() {
     }
     //Start saving matrix data
     int fileData[matrixSize*matrixSize*2];
+    int tempData[matrixSize*matrixSize];
+    tempMatrix = tempData;
     //Read matrix values
     for (int i = 0; i < matrixSize*2; i ++) {
         getline(matrixFile, fileLine);
@@ -86,6 +98,10 @@ int main() {
         if (choice == 1) {
             //Exit
             cout << "Goodbye!";
+        } else if (choice == 2) {
+            //Add the input matrices
+            Matrix matrixSum = matrix1  + matrix2;
+            matrixSum.display();
         } else {
             cout << "Invalid choice.";
         }
