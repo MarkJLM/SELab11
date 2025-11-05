@@ -14,6 +14,7 @@ public:
     int* data;
     int size;
     
+    //Matrix constructor
     Matrix(int* array, int matrixSize) {
         data = array;
         size = matrixSize;
@@ -22,25 +23,30 @@ public:
     void display() {
         int curDigits;
         int maxDigits = 1;
+        //Count spacing
         for (int i = 0; i < size * size; i ++) {
             while (maxDigits < *(data+i)) {
                 maxDigits *= 10;
             }
         }
         for (int i = 0; i < size * size; i ++) {
+            //Add spacing
             curDigits = *(data+i);
             while (maxDigits>curDigits) {
                 curDigits *= 10;
                 cout << " ";
             }
+            //Print matrix
             cout << *(data+i) << (((i+1)%size==0)?"\n":" ");
         }
     }
     
     Matrix operator+(const Matrix &other) {
         cout << "Sum of the input matrices:" << endl;
+        //Create a new matrix to hold the sum
         Matrix output(tempMatrix, size);
         for (int i = 0; i < size*size; i ++) {
+            //Set each output entry to the sum of the corresponding entries in the inputs
             *(output.data+i) = *(data + i) + *(other.data + i);
         }
         return output;
@@ -48,9 +54,11 @@ public:
     
     Matrix operator*(const Matrix &other) {
         cout << "Product of input matrices:" << endl;
+        //Create a new matrix to hold the product
         Matrix output(tempMatrix, size);
         for (int i = 0; i < size*size; i ++) {
             *(output.data+i) = 0;
+            //Set each output entry to the sum of the products of entries A_{ij} and B_{ji}
             for (int j = 0; j < size; j ++) {
                 *(output.data+i) += (*(data+(i/size)*size+j)) * (*(other.data+i%size+j*size));
             }
@@ -60,11 +68,13 @@ public:
     
     void trace() {
         int output = 0;
+        //Add main diagonal entries
         for (int i = 0; i < size; i ++) {
             output += *(data+i*(size+1));
         }
         cout << "Sum of main diagonal: " << output << endl;
         output = 0;
+        //Add secondary diagonal entries
         for (int i = 0; i < size; i ++) {
              output += *(data+(i+1)*(size-1));
         }
@@ -72,41 +82,54 @@ public:
     }
     
     void swapRows(int row1, int row2) {
+        //Validate index input
         if (row1 >= 0 && row1 < size && row2 >= 0 && row2 < size) {
             cout << "Row-swapped matrix:" << endl;
+            //Create a buffer for the first row
             int buffer;
             for (int i = 0; i < size; i ++) {
                 buffer = *(data+size*row1+i);
+                //Set the first row to the second row
                 *(data+size*row1+i) = *(data+size*row2+i);
+                //Restore the first row from the buffer to the second row
                 *(data+size*row2+i) = buffer;
             }
             display();
         } else {
+            //Display an error
             cout << "Invalid row numbers." << endl;
         }
     }
     
     void swapClms(int clm1, int clm2) {
+        //Validate index input
         if (clm1 >= 0 && clm1 < size && clm2 >= 0 && clm2 < size) {
             cout << "Column-swapped matrix:" << endl;
+            //Create a buffer for the first row
             int buffer;
             for (int i = 0; i < size; i ++) {
                 buffer = *(data+size*i+clm1);
+                //Set the first column to the second column
                 *(data+size*i+clm1) = *(data+size*i+clm2);
+                //Restore the first column from the buffer to the second column
                 *(data+size*i+clm2) = buffer;
             }
             display();
         } else {
+            //Display an error
             cout << "Invalid column numbers." << endl;
         }
     }
     
     void write(int row = 0, int clm = 0, int entry = 100) {
+        //Validate index input
         if (row >= 0 && row < size && clm >= 0 && clm < size) {
             cout << "Updated matrix:" << endl;
+            //Set specified entry to the new value
             *(data+size*row+clm) = entry;
             display();
         } else {
+            //Display an error
             cout << "Invalid index numbers." << endl;
         }
     }
